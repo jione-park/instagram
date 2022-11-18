@@ -6,6 +6,9 @@ public class server {
     public server(String i, String p){
 
         this.login(i, p);
+        //new Mainpage();
+        new MyPage();
+
     }
     public server(){
         this.join();
@@ -38,6 +41,8 @@ public class server {
 
         if (flag==true) {
             //회원가입 성공
+            //new Mainpage();
+            new MyPage();
 
         } else {
 
