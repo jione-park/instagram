@@ -7,7 +7,6 @@ public class server {
 
         this.login(i, p);
         //new Mainpage();
-        new MyPage();
 
     }
     public server(){
@@ -22,7 +21,7 @@ public class server {
         int inputValue = 0;
         if(!db.loginCheck(id,pw).equals("null")){
             //로그인 성공 ->  main page
-
+            new MyPage();
         }
     }
 
