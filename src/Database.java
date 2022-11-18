@@ -3,7 +3,7 @@ import java.io.IOException;
 public class Database {
     Connection con = null;
     Statement stmt = null;
-    String url = "jdbc:mysql://127.0.0.1/instagram?serverTimezone=UTC&&useSSL=false&user=root&password=9793";
+    String url = "jdbc:mysql://127.0.0.1/dragonbrain?serverTimezone=UTC&&useSSL=false&user=root&password=9793";
 
     public Database(){
         try{
