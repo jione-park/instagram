@@ -79,11 +79,11 @@ public class Database {
         String val = _v;
 
         try {
-            String selcectStr = "SELECT user_password FROM user WHERE user_nickname= '" + att + "'";
+            String selcectStr = "SELECT user_nickname FROM user WHERE user_nickname= " + att;
             ResultSet result = this.stmt.executeQuery(selcectStr);
 
             for(int var8 = 0; result.next(); ++var8) {
-                if (!val.equals(result.getString(val))) {
+                if (!val.equals(result.getString(att))) {
                     flag = true;
                 } else {
                     flag = false;
