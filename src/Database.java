@@ -3,7 +3,7 @@ import java.io.IOException;
 public class Database {
     Connection con = null;
     Statement stmt = null;
-    String url = "jdbc:mysql://127.0.0.1/instagram?serverTimezone=UTC&&useSSL=false&user=root&password=9793";
+    String url = "jdbc:mysql://127.0.0.1/dragonbrain?serverTimezone=UTC&&useSSL=false&user=root&password=9793";
 
     public Database(){
         try{
@@ -79,7 +79,7 @@ public class Database {
         String val = _v;
 
         try {
-            String selcectStr = "SELECT id FROM user WHERE nickname= " + att;
+            String selcectStr = "SELECT user_nickname FROM user WHERE user_nickname= " + att;
             ResultSet result = this.stmt.executeQuery(selcectStr);
 
             for(int var8 = 0; result.next(); ++var8) {
