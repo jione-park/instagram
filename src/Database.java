@@ -19,6 +19,27 @@ public class Database {
             System.out.println("[Server] 2MySQL 서버 연동 실패> ");
         }
     }
+    public int get_id(String email){
+        try{
+            //SELECT COUNT(name) as cnt FROM hero_collection;
+            //System.out.println(email);
+            String commandStr = "SELECT * from user where user_email= '" + email + "'";
+            //  String checkingStr = "SELECT (*)count ), user_nickname FROM user WHERE user_email='" + id + "'";
+            ResultSet result = this.stmt.executeQuery(commandStr);
+
+            int user_id = 0;
+
+            while(result.next()) {
+                user_id = result.getInt("user_id");
+                //System.out.println(user_id);
+
+            }
+            return user_id;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public String loginCheck(String _i, String _p) {
         String nickname = "null";
@@ -83,7 +104,7 @@ public class Database {
             ResultSet result = this.stmt.executeQuery(selcectStr);
 
             for(int var8 = 0; result.next(); ++var8) {
-                if (!val.equals(result.getString(att))) {
+                if (!att.equals(result.getString("user_nickname"))) {
                     flag = true;
                 } else {
                     flag = false;
@@ -97,5 +118,41 @@ public class Database {
 
         return flag;
     }
+    public int get_following_num(int user_id){
+        try{
+            //SELECT COUNT(name) as cnt FROM hero_collection;
+            //유저 아이디가 user_id인 사람의 팔로잉 수
+            String commandStr = "SELECT COUNT(follow_user_id) from follow";
+            //  String checkingStr = "SELECT (*)count ), user_nickname FROM user WHERE user_email='" + id + "'";
+            ResultSet result = this.stmt.executeQuery(commandStr);
 
+            int count =0;
+            while(result.next()) {
+                count = result.getInt("COUNT(follow_user_id)");
+            }
+            return count;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public int get_follower_num(int user_id){
+        int cnt ;
+        try{
+            //SELECT COUNT(name) as cnt FROM hero_collection;
+            //유저 아이디가 user_id인 사람의 팔로워 수
+            String commandStr = "SELECT COUNT(follow_following_id) from follow ";
+            //  String checkingStr = "SELECT (*)count ), user_nickname FROM user WHERE user_email='" + id + "'";
+            ResultSet result = this.stmt.executeQuery(commandStr);
+
+            int count = 0;
+            while(result.next()) {
+                count = result.getInt("COUNT(follow_following_id)");
+            }
+            return count;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

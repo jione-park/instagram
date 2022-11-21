@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class MyPage extends JFrame{
-
+    server sv = new server();
     public JPanel first;
     public JPanel p;
     public JLabel app;
@@ -16,8 +16,7 @@ public class MyPage extends JFrame{
     //public JList l1;
 
 
-    public MyPage(){
-
+    public MyPage(int user_id){
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new BorderLayout());
@@ -25,15 +24,17 @@ public class MyPage extends JFrame{
         first = new JPanel();
         first.setLayout(new BorderLayout());
 
+        //p panel -> 인스타 그램 로고만 붙어있음 -> 로고 누르면 홈으로 가게 처리해야함
         p = new JPanel();
         p.setLayout(new FlowLayout(FlowLayout.LEFT));
         app = new JLabel("instagram");
         p.add(app);
 
+
         p1 = new JPanel();
         p1.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        //유저 데이터에서 사진 불러옴
+        //유저 테이블에 프로필 사진 저장해야할 수 있어야 함
         ImageIcon img_icon = new ImageIcon("/Users/parkjiwon/IdeaProjects/instagram/button image/default.png");
         Image img = img_icon.getImage();
         Image changeImg = img.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
@@ -47,8 +48,12 @@ public class MyPage extends JFrame{
         p1_p1_1.setLayout(new BorderLayout());
         p1_p1_1_1 = new JPanel();
         p1_p1_1_1.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        //follow 버튼 누르면 팔로우 한 사람 테이블 창 띄어야함
         JButton follow = new JButton("follow");
-        JLabel follow2 = new JLabel("num");
+        int follow_num = sv.get_following_num(user_id);
+        String fm = String.valueOf(follow_num);
+        JLabel follow2 = new JLabel(fm);
         p1_p1_1_1.add(follow2);
         p1_p1_1.add(follow, BorderLayout.CENTER);
         p1_p1_1.add(p1_p1_1_1, BorderLayout.SOUTH);
@@ -57,8 +62,13 @@ public class MyPage extends JFrame{
         p1_p1_2.setLayout(new BorderLayout());
         JPanel p1_p1_2_1 = new JPanel();
         p1_p1_2_1.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        //follower 버튼 누르면 나를 팔로잉 한 사람 테이블 창 띄어야함
         JButton follower = new JButton("follower");
-        JLabel follower2 = new JLabel("num");
+        // int count = sv.follower_cnt();
+        int following = sv.get_following_num(user_id);
+        String fw = String.valueOf(following);
+        JLabel follower2 = new JLabel(fw);
         p1_p1_2_1.add(follower2);
         p1_p1_2.add(follower, BorderLayout.CENTER);
         p1_p1_2.add(p1_p1_2_1, BorderLayout.SOUTH);
@@ -67,7 +77,7 @@ public class MyPage extends JFrame{
         p1_p2.setLayout(new BorderLayout());
 
         JButton change = new JButton("Modify Profile");
-        JButton cancle = new JButton("cancle");
+        JButton cancle = new JButton("cancel");
 
         p1_p2.add(change, BorderLayout.CENTER);
         p1_p2.add(cancle, BorderLayout.SOUTH);
@@ -92,8 +102,6 @@ public class MyPage extends JFrame{
         // hashtag(hashtag)
         // comment(content, user_id, created_at)
         // post_like(user_id) -> count
-
-
 
         add(first, BorderLayout.NORTH);
         add(p2, BorderLayout.CENTER);
