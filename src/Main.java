@@ -48,14 +48,16 @@ public class Main extends JFrame{
                     return;
                 }
                 new server(id, pw);
-
+                setVisible(false);
             }
         });
+
         joinBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //회원가입 버튼 액션 -> 회원가입 -> 로그인
-                new server();
+                new server(0);
+                setVisible(false);
             }
         });
 
@@ -65,5 +67,6 @@ public class Main extends JFrame{
 
     public static void main(String[] args){
         new Main();
+
     }
 }

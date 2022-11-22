@@ -47,7 +47,6 @@ public class Database {
         String pw = _p;
 
         try {
-
             String checkingStr = "SELECT user_password, user_nickname FROM user WHERE user_email='" + id + "'";
             ResultSet result = this.stmt.executeQuery(checkingStr);
 
@@ -76,8 +75,9 @@ public class Database {
         String pw = _p;
         String em = _e;
         String bd = birth;
-        boolean check = this.overCheck(_nn, _p);
-        if (!check) {
+        boolean check = this.overCheck(_nn, _e);
+        System.out.println(check);
+        if (check == true) {
             try {
                 //id 형성 부분 바꿔야함
                 id = (int)(Math.random() * 10000);
@@ -90,25 +90,61 @@ public class Database {
                 System.out.println("[Server] 회원가입 실패 > " + var14.toString());
             }
         }
+        else{
+            System.out.println("닉네임 또는 이메일이 중복되었습니다");
+        }
 
         return flag;
     }
 
-    boolean overCheck(String _a, String _v) { //닉네임이랑 패스워드로 확인
+    public boolean modiCheck(int user_id, String _nn, String _p, String _e) {
         boolean flag = false;
-        String att = _a;
-        String val = _v;
+        String nn = _nn;
+        int id = -1;
+        int ui = user_id;
+        String pw = _p;
+        String em = _e;
+        boolean check = this.overCheck(_nn, _e);
+        System.out.println(check);
+        if (check == true) {
+            try {
+                //id 형성 부분 바꿔야함
+                id = (int)(Math.random() * 10000);
+                String insertStr = "update user set user_nickname = '" + nn + "', " + " user_password = '" + pw + "'," + "user_email = '" + em + "' where user_id = " + ui + ";";
+                this.stmt.executeUpdate(insertStr);
+                flag = true;
+                System.out.println("[Server] 정보변경 성공");
+            } catch (Exception var14) {
+                flag = false;
+                System.out.println("[Server] 정보변경 실패 > " + var14.toString());
+            }
+        }
+        else{
+            System.out.println("닉네임 또는 이메일이 중복되어 정보변경에 실패하였습니다");
+        }
+
+        return flag;
+    }
+
+
+    boolean overCheck(String _a, String _v) { //닉네임과 이메일로 중복체크
+        boolean flag = true;
+        String att = _a; //닉네임
+        String val = _v; //이메일
 
         try {
-            String selcectStr = "SELECT user_nickname FROM user WHERE user_nickname= '" + att + "'";
+            String selcectStr = "SELECT * FROM user WHERE user_nickname= '" + att + "' or user_email= '" + val + "'";
+
             ResultSet result = this.stmt.executeQuery(selcectStr);
 
+            //System.out.println(selcectStr);
             for(int var8 = 0; result.next(); ++var8) {
-                if (!att.equals(result.getString("user_nickname"))) {
-                    flag = true;
-                } else {
+                if (att.equals(result.getString("user_nickname")) == true || val.equals(result.getString("user_email")) == true) {
                     flag = false;
+                } else {
+                    flag = true;
                 }
+                //System.out.println(flag);
             }
 
             System.out.println("[Server] 중복 확인 성공");
@@ -150,6 +186,25 @@ public class Database {
                 count = result.getInt("COUNT(follow_following_id)");
             }
             return count;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void do_follow(int user_id){
+        try{
+            //SELECT COUNT(name) as cnt FROM hero_collection;
+            //유저 아이디가 user_id인 사람의 팔로워 수
+            String commandStr = "SELECT COUNT(follow_following_id) from follow ";
+            //String commandStr = "insert into follow values ()" +user_id + 팔로잉 할 사람의 아이디 ;
+            //  String checkingStr = "SELECT (*)count ), user_nickname FROM user WHERE user_email='" + id + "'";
+            ResultSet result = this.stmt.executeQuery(commandStr);
+
+            int count = 0;
+            while(result.next()) {
+                count = result.getInt("COUNT(follow_following_id)");
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

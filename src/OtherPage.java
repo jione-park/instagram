@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class MyPage extends JFrame{
+public class OtherPage extends JFrame{
     server sv = new server(1);
     public JPanel first;
     public JPanel p;
@@ -18,7 +18,7 @@ public class MyPage extends JFrame{
     //public JList l1;
 
 
-    public MyPage(int user_id){
+    public OtherPage(int user_id){
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new BorderLayout());
@@ -75,15 +75,15 @@ public class MyPage extends JFrame{
         p1_p1_2.add(follower, BorderLayout.CENTER);
         p1_p1_2.add(p1_p1_2_1, BorderLayout.SOUTH);
 
-        //JButton do_follow = new JButton("팔로우하기");
+        JButton do_follow = new JButton("팔로우하기");
 
-        /*do_follow.addActionListener(new ActionListener() {
+        do_follow.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //로그인 버튼 액션 -> 메인 페이지
                 sv.do_follow(user_id);
             }
-        });*/
+        });
 
         p1_p2 = new JPanel(); //change, cancel
         p1_p2.setLayout(new BorderLayout());
@@ -118,15 +118,6 @@ public class MyPage extends JFrame{
 
         add(first, BorderLayout.NORTH);
         add(p2, BorderLayout.CENTER);
-
-        change.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //회원가입 버튼 액션 -> 회원가입 -> 로그인
-                new server(user_id*-1);
-                //setVisible(false);
-            }
-        });
 
         setVisible(true);
     }
