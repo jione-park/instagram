@@ -10,7 +10,7 @@ public class server {
     public server(String i, String p){
 
         this.login(i, p);
-        //new Mainpage();
+
 
     }
 
@@ -77,7 +77,7 @@ public class server {
 
         if (flag==true) {
             //회원가입 성공
-            //new Mainpage();
+
             user_id = db.get_id(email);
             new MyPage(user_id);
 
@@ -97,7 +97,7 @@ public class server {
 
         if (flag==true) {
             //정보변경 성공
-            //new Mainpage();
+
             user_id = db.get_id(email);
             //new MyPage(user_id);
 
@@ -115,5 +115,10 @@ public class server {
     }
     public void do_follow(int user_id){
         db.do_follow(user_id);
+    }
+
+    public int get_post_num(int user_id){
+        int cnt = db.get_post_num(user_id);
+        return  cnt;
     }
 }

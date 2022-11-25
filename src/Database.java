@@ -210,4 +210,24 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
+
+    public int get_post_num(int user_id){
+        int cnt ;
+        try{
+            //SELECT COUNT(name) as cnt FROM hero_collection;
+            //유저 아이디가 user_id인 사람의 팔로워 수
+            String commandStr = "SELECT COUNT(*) from post group by post_user_id where post_user_id = " + user_id;
+            //  String checkingStr = "SELECT (*)count ), user_nickname FROM user WHERE user_email='" + id + "'";
+            ResultSet result = this.stmt.executeQuery(commandStr);
+
+            int count = 0;
+            while(result.next()) {
+                count = result.getInt("COUNT(*)");
+            }
+            return count;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

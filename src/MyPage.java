@@ -15,7 +15,7 @@ public class MyPage extends JFrame{
     public JPanel p1_p1_2;
     public JPanel p1_p2;
     public JPanel p2;
-    //public JList l1;
+    public JList l1;
 
 
     public MyPage(int user_id){
@@ -94,11 +94,14 @@ public class MyPage extends JFrame{
         p1_p2.add(change, BorderLayout.CENTER);
         p1_p2.add(cancel, BorderLayout.SOUTH);
 
+        JButton upload = new JButton("upload");
+
         p1.add(profile);
         p1.add(p1_p1_1);
         p1.add(p1_p1_2);
         //p1.add(do_follow);
         p1.add(p1_p2);
+        p1.add(upload);
 
         first.add(p, BorderLayout.NORTH);
         first.add(p1, BorderLayout.CENTER);
@@ -106,18 +109,20 @@ public class MyPage extends JFrame{
         p2 = new JPanel();
         p2.setBackground(Color.yellow);
 
-        //l1 = new JList(new DefaultListModel());
-        //user id를 불러옴
-        //while문으로 user id에 해당하는 post들을 불러와서 JList에 저장 - post table
-        //post (text, created_at)
-        // post media(content)
-        // post_hashtag(hashtag id)
-        // hashtag(hashtag)
-        // comment(content, user_id, created_at)
-        // post_like(user_id) -> count
+        /*PostMedia[] postM;
+
+        int post_num = sv.get_post_num(user_id);
+        int i = 0;
+        while (i <= post_num){
+            postM[i] = new PostMedia();
+            i++;
+        }
+
+        l1 = new JList(postM);*/
 
         add(first, BorderLayout.NORTH);
         add(p2, BorderLayout.CENTER);
+
 
         change.addActionListener(new ActionListener() {
             @Override
@@ -125,6 +130,16 @@ public class MyPage extends JFrame{
                 //회원가입 버튼 액션 -> 회원가입 -> 로그인
                 new server(user_id*-1);
                 //setVisible(false);
+            }
+        });
+
+        upload.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new UploadUI();
+                //1.upload 페이지로 이동
+                //2.upload 페이지에서 유저로부터 text를 입력받고, 사진을 받음
+                //3.데베에 해당 text와 사진을 보내줌
             }
         });
 
