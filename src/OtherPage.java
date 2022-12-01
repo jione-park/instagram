@@ -18,7 +18,9 @@ public class OtherPage extends JFrame{
     //public JList l1;
 
 
-    public OtherPage(int user_id){
+    public OtherPage(String email, int user_id){
+
+        int go_to_page = sv.get_id(email);
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new BorderLayout());
@@ -51,9 +53,11 @@ public class OtherPage extends JFrame{
         p1_p1_1_1 = new JPanel();
         p1_p1_1_1.setLayout(new FlowLayout(FlowLayout.CENTER));
 
+
+
         //follow 버튼 누르면 팔로우 한 사람 테이블 창 띄어야함
         JButton follow = new JButton("follow");
-        int follow_num = sv.get_following_num(user_id);
+        int follow_num = sv.get_following_num(go_to_page);
         String fm = String.valueOf(follow_num);
         JLabel follow2 = new JLabel(fm);
         p1_p1_1_1.add(follow2);
@@ -68,7 +72,10 @@ public class OtherPage extends JFrame{
         //follower 버튼 누르면 나를 팔로잉 한 사람 테이블 창 띄어야함
         JButton follower = new JButton("follower");
         // int count = sv.follower_cnt();
-        int following = sv.get_following_num(user_id);
+
+
+
+        int following = sv.get_following_num(go_to_page);
         String fw = String.valueOf(following);
         JLabel follower2 = new JLabel(fw);
         p1_p1_2_1.add(follower2);
@@ -81,17 +88,17 @@ public class OtherPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //로그인 버튼 액션 -> 메인 페이지
-                sv.do_follow(user_id);
+                sv.do_follow(go_to_page);
             }
         });
 
         p1_p2 = new JPanel(); //change, cancel
         p1_p2.setLayout(new BorderLayout());
 
-        JButton change = new JButton("Modify Profile");
+        //JButton change = new JButton("Modify Profile");
         JButton cancel = new JButton("cancel");
 
-        p1_p2.add(change, BorderLayout.CENTER);
+        //p1_p2.add(change, BorderLayout.CENTER);
         p1_p2.add(cancel, BorderLayout.SOUTH);
 
         p1.add(profile);

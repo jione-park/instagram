@@ -8,7 +8,7 @@ public class Main extends JFrame{
     private JLabel idLabel = new JLabel("아이디(이메일) ");
     private JLabel pwLabel = new JLabel("비밀번호 ");
     private JTextField idText = new JTextField();
-    private JTextField pwText = new JTextField();
+    private TextField pwText = new TextField();
     private JButton loginBtn = new JButton("로그인");
     private JButton joinBtn = new JButton("회원가입");
     //private JButton joinBtn = new JButton("회원가입");
@@ -17,6 +17,7 @@ public class Main extends JFrame{
     public Main(){
         super("로그인 창!");
         this.setContentPane(loginPanel);
+        pwText.setEchoChar('*');
         loginPanel.add(idLabel);
         loginPanel.add(pwLabel);
         loginPanel.add(idText);
@@ -62,10 +63,10 @@ public class Main extends JFrame{
         });
 
         //joinBtn.addActionListener(this);
-
     }
 
     public static void main(String[] args){
         new Main();
+
     }
 }

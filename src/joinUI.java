@@ -1,9 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class joinUI extends JFrame{
 
@@ -69,7 +66,7 @@ public class joinUI extends JFrame{
         panel.add(NickNameText);
         NickNameText.setColumns(10);
         //회원가입UI "가입" 버튼
-        signUpBtn = new JButton("\uAC00\uC785");	//가입
+        signUpBtn = new JButton("\uAC00\uC785");   //가입
         signUpBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -86,7 +83,7 @@ public class joinUI extends JFrame{
         signUpBtn.setBounds(44, 179, 97, 23);
         panel.add(signUpBtn);
         //회원가입UI "취소" 버튼
-        cancelBtn = new JButton("\uCDE8\uC18C");	//취소
+        cancelBtn = new JButton("\uCDE8\uC18C");   //취소
         cancelBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -94,6 +91,7 @@ public class joinUI extends JFrame{
             }
         });
         cancelBtn.setBounds(148, 179, 97, 23);
+        cancelBtn.addActionListener(this::actionPerformed);
         panel.add(cancelBtn);
         //회원가입UI "생년월일"
         JLabel lblNewLabel_2 = new JLabel("생년월일");
@@ -157,6 +155,17 @@ public class joinUI extends JFrame{
         panel.add(pwText);
         setVisible(true);
     }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        if(e.getSource() == cancelBtn) {
+            new Main();
+            setVisible(false);
+        }
+
+    }
+
+
     private void msgSummit() {// 소켓생성
         new server(NameText.getText(),  NickNameText.getText() ,  pwText.getText() , EmailText.getText(), birthText.getText());
     }

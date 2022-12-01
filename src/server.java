@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.sql.ResultSet;
 
 public class server {
 
@@ -10,7 +11,7 @@ public class server {
     public server(String i, String p){
 
         this.login(i, p);
-
+        //new Mainpage();
 
     }
 
@@ -22,7 +23,33 @@ public class server {
         else if (i < 0){ //user id
             this.modify(i*-1);
         }
+        else if(i == 1)
+        {
+            this.list();
+        }
 
+    }
+
+    public server(int i, String email, int id) //팔로우하기,
+    {
+        Database db = new Database();
+
+        if(i == 1){//팔로우하기
+            //System.out.println("aaaaaaaa");
+            db.follow(email, id);
+        }
+        else if(i == 2){//페이지 방문
+            System.out.println("aaaaaaaa");
+            new OtherPage(email, id);
+        }
+
+
+
+    }
+
+    public server()
+    {
+        //아무것도 안하고 객체만들려고 ㅅ만듬.
     }
 
     //joinUI 클래스에서 실행됨! 인자: 회원가입에 필요한 정보 -> 멤버 함수 실행
@@ -35,6 +62,7 @@ public class server {
         this.member_modify(user_id, nn, pw, em);
     }
 
+
     //인자: 아이디, 패스워드 -> 해당 정보를 가지고 로그인 실행 -> 데이터베이스 참조 -> 로그인 성공시 마이페이지 오픈
     private void login(String id, String pw) {
         int inputValue = 0;
@@ -42,7 +70,8 @@ public class server {
             //로그인 성공 ->  main page
             user_id = db.get_id(id);
             //System.out.println(user_id);
-            new MyPage(user_id);
+            //new MyPage(user_id);
+            new MainPage(user_id);
         }
         else
         {
@@ -53,7 +82,6 @@ public class server {
             f.setVisible(true);
             new Main();
         }
-
     }
 
     //joinUI 클래스 실행
@@ -64,6 +92,12 @@ public class server {
         new ModifyUI(user_id);
     }
 
+    /*
+         public String get_follow_info(int user_id){
+            info = db.get_follow_num(user_id);
+            return info;
+        }
+        */
     //인자로 받은 정보를 데이터베이스로 보내 회원가입 실행 -> 회원 가입 성공 후 마이페이지 오픈
     //(String _n, String _nn, String _p, String _e, String birth)
     private void member(String name,String Nname, String pw, String email, String birth) {
@@ -77,9 +111,9 @@ public class server {
 
         if (flag==true) {
             //회원가입 성공
-
+            //new Mainpage();
             user_id = db.get_id(email);
-            new MyPage(user_id);
+            new MyPage(user_id,0, 0);
 
         } else {
 
@@ -97,7 +131,7 @@ public class server {
 
         if (flag==true) {
             //정보변경 성공
-
+            //new Mainpage();
             user_id = db.get_id(email);
             //new MyPage(user_id);
 
@@ -105,6 +139,7 @@ public class server {
 
         }
     }
+
     public int get_following_num(int user_id){
         int cnt = db.get_following_num(user_id);
         return cnt;
@@ -113,12 +148,46 @@ public class server {
         int cnt = db.get_follower_num(user_id);
         return cnt;
     }
+
     public void do_follow(int user_id){
         db.do_follow(user_id);
     }
 
-    public int get_post_num(int user_id){
-        int cnt = db.get_post_num(user_id);
-        return  cnt;
+    public void follower_list(int user_id){
+
     }
+
+    public String[] list()
+    {
+        String result[] = db.get_List();
+
+        return result;
+    }
+
+
+    public int getfollowNumber(int id)
+    {
+        //Database db = new Database();
+        int count = db.getNumber(id);
+        System.out.println("[sever] : " + count);
+        return count;
+    }
+
+    public int getfollowingNumber(int id)
+    {
+        //Database db = new Database();
+        int count = db.getNumbers(id);
+        System.out.println("[sever] : " + count);
+        return count;
+    }
+
+    public int get_id(String email){
+        int user_id = 0;
+
+        user_id = db.get_id(email);
+
+        return user_id;
+    }
+
+
 }
