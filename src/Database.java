@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 public class Database {
     Connection con = null;
     Statement stmt = null;
-    String url = "jdbc:mysql://127.0.0.1/dragonbrain?serverTimezone=UTC&&useSSL=false&user=root&password=9793";
+    String url = "jdbc:mysql://127.0.0.1/dragonbrain?serverTimezone=UTC&&useSSL=false&user=root&password= 9793";
 
     public Database() {
         try {
@@ -128,28 +128,6 @@ public class Database {
     }
 
 
-    public void follow(String email, int id) //email =  팔로우하려고 하는 사람의 이메일,  id =  팔로우 주체
-    {
-        try {
-            int abcd = id;
-            String str = "SELECT user_id FROM user WHERE user_email= '" + email + "' ";
-            ResultSet result = this.stmt.executeQuery(str);
-            int ab = 0 ;
-            while(result.next())
-            {
-                ab = result.getInt(1);
-            }
-
-            String insertStr = "insert into follow values (" + ab + "," + abcd + ")";
-            this.stmt.executeUpdate(insertStr);
-
-            System.out.println("팔로우 완료");
-
-        }catch (Exception var14) {;
-            System.out.println("[Server] 팔로우하기 실패 "); //+ var14.toString()
-            JOptionPane.showMessageDialog(null, "이미 팔로우 하셨습니다.", "알림", 1);
-        }
-    }
 
 
     boolean overCheck(String _a, String _v) { //닉네임과 이메일로 중복체크
@@ -179,6 +157,55 @@ public class Database {
 
         return flag;
     }
+
+    public void follow(String email, int id) //email =  팔로우하려고 하는 사람의 이메일,  id =  팔로우 주체
+    {
+        try {
+            int abcd = id;
+            String str = "SELECT user_id FROM user WHERE user_email= '" + email + "' ";
+            ResultSet result = this.stmt.executeQuery(str);
+            int ab = 0 ;
+            while(result.next())
+            {
+                ab = result.getInt(1);
+            }
+
+            String insertStr = "insert into follow values (" + ab + "," + abcd + ")";
+            this.stmt.executeUpdate(insertStr);
+
+            System.out.println("팔로우 완료");
+
+        }catch (Exception var14) {;
+            System.out.println("[Server] 팔로우하기 실패 "); //+ var14.toString()
+            JOptionPane.showMessageDialog(null, "이미 팔로우 하셨습니다.", "알림", 1);
+        }
+    }
+
+
+    public void follow_cancel(String email, int id) //email =  팔로우하려고 하는 사람의 이메일,  id =  팔로우 주체
+    {
+        try {
+            String str = "SELECT * FROM user WHERE user_email= '" + email + "' ";
+            ResultSet result = this.stmt.executeQuery(str);
+            int ab = 0 ;
+            while(result.next())
+            {
+                ab = result.getInt("user_id");
+            }
+            System.out.println(ab);
+            System.out.println(id);
+            String insertStr = "delete from follow where follow_user_id = " + ab + " and follow_following_id = " + id;
+            this.stmt.executeUpdate(insertStr);
+
+            System.out.println("팔로우 취소 완료");
+
+        }catch (Exception var14) {;
+            System.out.println(var14); //+ var14.toString()
+            JOptionPane.showMessageDialog(null, "이미 팔로우 취소 하셨습니다.", "알림", 1);
+        }
+    }
+
+
 
     public int get_following_num(int user_id) {
         try {
@@ -308,8 +335,188 @@ public class Database {
             //해당 Id의 페이지로 가기
             new OtherPage(email, id);
 
-        }catch (Exception var14) {;
+        }catch (Exception var14) {}
+    }
 
+
+    public void uploadText(int user_id, String upload) {
+        try {
+            int abcd = user_id;
+/*
+*             String str = "SELECT user_id FROM user WHERE user_email= '" + email + "' ";
+            ResultSet result = this.stmt.executeQuery(str);
+            int ab = 0;
+            while (result.next()) {
+                ab = result.getInt(1);
+            }
+* */
+            int post_id = (int) (Math.random() * 10000);
+            // foreign key 수정필요 post_user_id -> user_id
+            String insertStr = "insert into post values (" + post_id + "," + user_id +","+ "'"+upload +"'"+ ")";
+            this.stmt.executeUpdate(insertStr);
+
+            System.out.println("업로드 완료");
+
+        } catch (Exception var14) {
+            ;
+            System.out.println(var14);
+            System.out.println("[Server] 게시물 업로드 실패 "); //+ var14.toString()
+            JOptionPane.showMessageDialog(null, "게시물 업로드 완료!", "알림", 1);
+        }
+    }
+
+
+
+    //내가 팔로우한 사람들의 id를 가져와준다. ->server
+    public ResultSet get_follower(int id)
+    {
+        ResultSet res = null;
+        try {
+            String commandStr = "SELECT * from follow where follow_following_id = " + id;
+            res = this.stmt.executeQuery(commandStr);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return res;
+    }
+
+    //나를 팔로우한 사람들의 id가져오기 ->server
+    public ResultSet get_follow(int id)
+    {
+        ResultSet res = null;
+        try {
+            String commandStr = "SELECT * from follow where follow_user_id = " + id;
+            res = this.stmt.executeQuery(commandStr);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return res;
+    }
+
+
+
+    //get_follower 함수를 통해 얻어온 id를 이용해서 nickName을 가져온다.
+    public String[] get_NickName(ResultSet rs)
+    {
+
+        ResultSet res = null;
+        String[] str = new String[100];
+        int cc = 0;
+        try {
+            int[]abc = new int[100] ;
+            int count = 0;
+            while(rs.next())
+            {
+                abc[count] = rs.getInt("follow_user_id");
+                System.out.println(abc[count]);
+                count++;
+            }
+            for(int k =0; k<count; k++) {
+
+                String commandStr = "SELECT * from user where user_id = " + abc[k];
+                res = this.stmt.executeQuery(commandStr);
+                while (res.next()) {
+                    str[k] = res.getString("user_nickname");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return str;
+    }
+
+
+    //get_follow함수를 통해 얻은 id로 nickname가져오기.
+    public String[] get_NickNames(ResultSet rs)
+    {
+
+        ResultSet res = null;
+        String[] str = new String[100];
+        int cc = 0;
+        try {
+            int[]abc = new int[100] ;
+            int count = 0;
+            while(rs.next())
+            {
+                abc[count] = rs.getInt("follow_following_id");
+                System.out.println(abc[count]);
+                count++;
+            }
+            for(int k =0; k<count; k++) {
+
+                String commandStr = "SELECT * from user where user_id = " + abc[k];
+                res = this.stmt.executeQuery(commandStr);
+                while (res.next()) {
+                    str[k] = res.getString("user_nickname");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return str;
+    }
+
+    public String[] get_Post(int user_id) {
+        try {
+            String commandStr = "SELECT post_content from post WHERE post_user_id=" + user_id;
+            //  String checkingStr = "SELECT (*)count ), user_nickname FROM user WHERE user_email='" + id + "'";
+            ResultSet result = this.stmt.executeQuery(commandStr);
+            String[] abc = new String[100];
+            int i = 0;
+
+            while (result.next()) {
+                abc[i] = result.getString("post_content");
+                System.out.println(abc[i]);
+                i++;
+            }
+            return abc;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public String[] get_Post(String email) {
+        try {
+            String commandStr = "SELECT post_content from post WHERE post_user_id=" + email;
+            //  String checkingStr = "SELECT (*)count ), user_nickname FROM user WHERE user_email='" + id + "'";
+            ResultSet result = this.stmt.executeQuery(commandStr);
+            String[] abc = new String[100];
+            int i = 0;
+
+            while (result.next()) {
+                abc[i] = result.getString("post_content");
+                System.out.println(abc[i]);
+                i++;
+            }
+            return abc;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String[] get_main_Post(int user_id) {
+        try {
+            //  String commandStr = "SELECT post_content from post WHERE post_user_id!=" + user_id;
+            //String commandStr = "select post_content from post where post_user_id not in("+user_id+")";
+            String commandStr = "SELECT post_content, post_user_id FROM post WHERE post_user_id NOT IN ("+user_id +")";
+            //  String checkingStr = "SELECT (*)count ), user_nickname FROM user WHERE user_email='" + id + "'";
+            ResultSet result = this.stmt.executeQuery(commandStr);
+            String[] abc = new String[1000];
+            int i = 0;
+
+            while (result.next()) {
+                abc[i] = result.getString("post_content");
+                //abc[i][1] = result.getString("post_user_id");
+                // System.out.println(abc[i]);
+                i++;
+            }
+            return abc;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

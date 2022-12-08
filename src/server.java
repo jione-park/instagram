@@ -35,21 +35,23 @@ public class server {
         Database db = new Database();
 
         if(i == 1){//팔로우하기
-            //System.out.println("aaaaaaaa");
+            System.out.println("팔로우하기");
             db.follow(email, id);
         }
         else if(i == 2){//페이지 방문
-            System.out.println("aaaaaaaa");
+            System.out.println("페이지 방문하기");
             new OtherPage(email, id);
         }
-
-
-
+        else if(i == 3) //팔로우취소하기
+        {
+            System.out.println("팔로우 취소하기");
+            db.follow_cancel(email, id);
+        }
     }
 
     public server()
     {
-        //아무것도 안하고 객체만들려고 ㅅ만듬.
+        //아무것도 안하고 객체만들려고 만듦.
     }
 
     //joinUI 클래스에서 실행됨! 인자: 회원가입에 필요한 정보 -> 멤버 함수 실행
@@ -83,6 +85,16 @@ public class server {
             new Main();
         }
     }
+
+    public server(int user_id, String uploadTxt){
+        // text 업로드 하기
+        this.uploadText(user_id,uploadTxt);
+    }
+
+    private void uploadText(int user_id , String upload){
+        db.uploadText(user_id, upload);
+    }
+
 
     //joinUI 클래스 실행
     private void join(){
@@ -188,6 +200,58 @@ public class server {
 
         return user_id;
     }
+
+
+
+    //내가 팔로우하는 사람들의 id가져오기
+    public ResultSet get_follower(int id)
+    {
+        ResultSet result = db.get_follower(id);
+        return result;
+    }
+
+    //나를 팔로우하는 사람들의 id가져오기
+    public ResultSet get_follow(int id)
+    {
+        ResultSet result = db.get_follow(id);
+        return result;
+    }
+
+
+
+    //내가 팔로우하는 사람들의 nickname가져오기
+    public String[] get_NickName(ResultSet rs)
+    {
+        String result[] = db.get_NickName(rs);
+        return result;
+    }
+
+
+
+    //나를 팔로우하는 사람들의 nickname가져오기
+    public String[] get_NickNames(ResultSet rs)
+    {
+        String result[] = db.get_NickNames(rs);
+        return result;
+    }
+
+
+    public String[] post(int user_id){
+        String post[] = db.get_Post(user_id);
+
+        return post;
+    }
+    public String[] post1(String email){
+        String post[] = db.get_Post(email);
+
+        return post;
+    }
+    public String[] mainpost(int user_id){
+        String mainp[] = db.get_main_Post(user_id);
+
+        return mainp;
+    }
+
 
 
 }
